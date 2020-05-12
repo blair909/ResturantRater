@@ -106,5 +106,23 @@ namespace ResturantRater.Controllers
 
             return View(resturant);
         }
+
+        // GET: Resturant/Details/{id}
+        [HttpGet]
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Resturant resturant = _db.Resturants.Find(id);
+            if (resturant == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(resturant);
+        }
     }
 }
