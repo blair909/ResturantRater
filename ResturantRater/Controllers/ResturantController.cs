@@ -1,6 +1,7 @@
 ﻿using ResturantRater.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -66,6 +67,44 @@ namespace ResturantRater.Controllers
             _db.Resturants.Remove(resturant);
             _db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // GET: Resturant/Edit/{id}
+        // Get an Id from the user
+        // Handle if the Id is null
+        // Find a Resturant by that Id
+        // If the Resturant doesn't exist
+        // Return the Resturant and the View
+        [HttpGet]
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Resturant resturant = _db.Resturants.Find(id);
+            if (resturant == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            return View(resturant);
+        }
+
+        // POST: Resturant/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Resturant resturant)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Entry(resturant).State = EntityState.Modified;
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(resturant);
         }
     }
 }
